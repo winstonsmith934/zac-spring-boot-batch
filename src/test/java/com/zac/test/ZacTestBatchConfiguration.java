@@ -36,8 +36,7 @@ import com.example.zac.ZacDataSourceConfig;
 @EnableAutoConfiguration
 @EnableBatchProcessing(modular = true)
 @MapperScan("com.example.dao")
-//@PropertySource({ "classpath:beans.properties", "classpath:zac-env-pro.properties", "classpath:/conf/common/zac-common.properties" })
-@PropertySource({ "classpath:beans.properties", "classpath:zac-env-local.properties", "classpath:/conf/common/zac-common.properties" })
+@PropertySource({ "classpath:beans.properties", "classpath:zac-env-local.properties", "classpath:/zac-common.properties" })
 
 // 不加载主程序的class,使用自己的设定
 @ComponentScan(excludeFilters = {

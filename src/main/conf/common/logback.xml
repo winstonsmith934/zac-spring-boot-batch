@@ -108,14 +108,7 @@
     <logger name="org.springframework" level="ERROR" additivity="true"/>
     <logger name="ch.qos.logback" level="ERROR" additivity="true"/>
     
-	<logger name="com.example" level="${${spring.profiles.active}.logger.project.level:-DEBUG}" additivity="false">
-		<appender-ref ref="stdout" />
-		<appender-ref ref="main" />
-		<appender-ref ref="ZAC-ERROR" />
-		<!-- 关于error log 发邮件的部分还未解决 zacTODO
-		<appender-ref ref="mailer" />
-		-->
-	</logger>
+	<logger name="com.example" level="${${spring.profiles.active}.logger.project.level:-DEBUG}" additivity="true"/>
 
 	<root level="${${spring.profiles.active}.logger.root.level:-ERROR}">
 		<appender-ref ref="stdout" />
