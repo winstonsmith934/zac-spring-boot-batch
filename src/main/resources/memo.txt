@@ -1,7 +1,7 @@
 ##################################################
 # This is a spring batch project
 ##################################################
-# プロフィール -> src/main/resources にコピーする
+# 下記プロフィール -> src/main/resources にコピーする
 logback.properties
 logback.xml
 zac-common.properties

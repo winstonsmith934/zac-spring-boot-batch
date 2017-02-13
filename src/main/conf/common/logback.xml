@@ -74,7 +74,7 @@
 	</appender>
 	
 	<!-- mailer appender -->
-	<!-- 关于error log 发邮件的部分还未解决 TODO
+	<!-- 关于error log 发邮件的部分还未解决 zacTODO
 	<appender name="mailer" class="ch.qos.logback.classic.net.SMTPAppender">
         <smtpHost>localhost</smtpHost>
         <smtpPort>25</smtpPort>
@@ -104,23 +104,24 @@
     <!-- Suppress a false warn for issue https://github.com/mybatis/mybatis-spring-boot/issues/9 -->
     <logger name="org.springframework.beans.factory.support.DisposableBeanAdapter" level="ERROR" additivity="false"/>
     
-    <logger name="org.springframework" level="WARN" additivity="false"/>
-    <logger name="ch.qos.logback" level="WARN" additivity="false"/>
+    <!-- フレームlogレベル -->
+    <logger name="org.springframework" level="ERROR" additivity="true"/>
+    <logger name="ch.qos.logback" level="ERROR" additivity="true"/>
     
 	<logger name="com.example" level="${${spring.profiles.active}.logger.project.level:-DEBUG}" additivity="false">
 		<appender-ref ref="stdout" />
 		<appender-ref ref="main" />
 		<appender-ref ref="ZAC-ERROR" />
-		<!-- 关于error log 发邮件的部分还未解决 TODO
+		<!-- 关于error log 发邮件的部分还未解决 zacTODO
 		<appender-ref ref="mailer" />
 		-->
 	</logger>
 
-	<root level="${${spring.profiles.active}.logger.root.level:-DEBUG}">
+	<root level="${${spring.profiles.active}.logger.root.level:-ERROR}">
 		<appender-ref ref="stdout" />
 		<appender-ref ref="main" />
 		<appender-ref ref="ZAC-ERROR" />
-		<!-- 关于error log 发邮件的部分还未解决 TODO
+		<!-- 关于error log 发邮件的部分还未解决 zacTODO
 		<appender-ref ref="mailer" />
 		-->
 	</root>
