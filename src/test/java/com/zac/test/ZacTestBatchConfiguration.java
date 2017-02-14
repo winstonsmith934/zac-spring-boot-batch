@@ -36,7 +36,7 @@ import com.example.zac.ZacDataSourceConfig;
 @EnableAutoConfiguration
 @EnableBatchProcessing(modular = true)
 @MapperScan("com.example.dao")
-@PropertySource({ "classpath:beans.properties", "classpath:zac-env-local.properties", "classpath:/zac-common.properties" })
+@PropertySource({ "classpath:beans.properties", "classpath:zac-env.properties", "classpath:/zac-common.properties" })
 
 // 不加载主程序的class,使用自己的设定
 @ComponentScan(excludeFilters = {
@@ -55,7 +55,10 @@ public class ZacTestBatchConfiguration {
     String userName;
     @Value("${zac.test.jdbc.password}")
     String passWord;
-
+    
+    @Value("${zac.timezone}")
+    private String zacTimezone;
+    
     @Bean
     @Autowired
     public StepRunner stepRunner(JobLauncher jobLauncher, JobRepository jobRepository) {
@@ -66,6 +69,7 @@ public class ZacTestBatchConfiguration {
     @Bean(destroyMethod = "close")
     public BasicDataSource testDataSource() {
 
+        System.err.println(zacTimezone);
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUrl(url);
