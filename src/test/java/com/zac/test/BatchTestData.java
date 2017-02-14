@@ -48,7 +48,7 @@ public class BatchTestData {
      * @param userId
      * @throws ParseException
      */
-    public  static void updateCreate_time(ScriptRunner scriptRunner ,String testDay,String testTime,String userId) throws ParseException{
+    public static void updateCreate_time(ScriptRunner scriptRunner ,String testDay,String testTime,String userId) throws ParseException{
         String sqlStr = "UPDATE user SET create_time='" + testDay + " " + testTime + "' WHERE id in ('" + userId + "');";
         scriptRunner.runScript(new StringReader(sqlStr));
     }
@@ -62,8 +62,19 @@ public class BatchTestData {
      * @param userId
      * @throws ParseException
      */
-    public  static void updateUpdate_time(ScriptRunner scriptRunner ,String testDay,String testTime,String userId) throws ParseException{
-        String sqlStr = "UPDATE user SET update_time='" + testDay + " " + testTime + "' WHERE id in ('" + userId + "');";
+    public static void updateUpdate_time(ScriptRunner scriptRunner ,String testDay,String testTime,String userId) throws ParseException{
+        String sqlStr = "UPDATE user SET update_time='" + testDay + " " + testTime + "' WHERE id = ('" + userId + "');";
+        scriptRunner.runScript(new StringReader(sqlStr));
+    }
+    
+    /**
+     * Select latest user id
+     * 
+     * @param scriptRunner
+     * @throws ParseException
+     */
+    public static void selectFirstId(ScriptRunner scriptRunner) throws ParseException {
+        String sqlStr = "SELECT id FROM cbt_kaola_order_info_tbl ORDER BY update_time ASC LIMIT 0,1;";
         scriptRunner.runScript(new StringReader(sqlStr));
     }
 

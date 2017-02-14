@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -19,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
@@ -94,9 +97,11 @@ public class BatchTest {
     @Value("${zac.timezone}")
     private String zacTimezone;
     
+    static int cnt = 0;
     @BeforeClass
     public static void execBeforeClass() throws SQLException{
-        System.err.println("***** @BeforeClass START *****");
+        cnt = cnt + 1;
+        log.debug("***** @BeforeClass START *****" + cnt);
         
         testDataBase = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL)
                 .continueOnError(true)
@@ -111,75 +116,80 @@ public class BatchTest {
         
         dbBean2StrPattern = Pattern.compile("^\\S+@\\w+\\[(.+)\\]$", Pattern.CASE_INSENSITIVE);
         
-        System.err.println("***** @BeforeClass END *****");
+        log.debug("***** @BeforeClass END *****" + cnt);
     }
     
     @SuppressWarnings("static-access")
     @Before
     public void execBefore() throws Exception{
-        System.err.println("*** @Before START ***");
+        cnt = cnt + 1;
+        log.debug("*** @Before START ***" + cnt);
         
         log.debug(zacTimezone);
         
-//        if(this.sdf == null){
-//            this.sdf = new SimpleDateFormat(this.dateFormatShort);
-//            this.sdf.setTimeZone(TimeZone.getTimeZone(this.zacTimeZone));
-//        }
+        if(this.sdf == null){
+            this.sdf = new SimpleDateFormat(this.dateFormatShort);
+            this.sdf.setTimeZone(TimeZone.getTimeZone(this.zacTimeZone));
+        }
         
-//        if (null == jobLauncherTestUtils) {
-//            jobLauncherTestUtils = new JobLauncherTestUtils();
-//            jobLauncherTestUtils.setJobRepository(jobRepository);
-//            jobLauncherTestUtils.setJobLauncher(jobLauncher);
-//            jobLauncherTestUtils.setJob(jobRegistry.getJob("testJob04"));
-//        }
-//        
-//        JobParametersBuilder jpb = new JobParametersBuilder();
-//        jobParameters = jpb.addString("testCd", "999")
-//                            .addString("UUID", UUID.randomUUID().toString())
-//                            .toJobParameters();
-//        
-//        if(null == user){
-//            user = new User();
-//        }
+        if (null == jobLauncherTestUtils) {
+            jobLauncherTestUtils = new JobLauncherTestUtils();
+            jobLauncherTestUtils.setJobRepository(jobRepository);
+            jobLauncherTestUtils.setJobLauncher(jobLauncher);
+            jobLauncherTestUtils.setJob(jobRegistry.getJob("testJob04"));
+        }
+        
+        JobParametersBuilder jpb = new JobParametersBuilder();
+        jobParameters = jpb.addString("testCd", "999")
+                            .addString("UUID", UUID.randomUUID().toString())
+                            .toJobParameters();
+        
+        if(null == user){
+            user = new User();
+        }
 
         batchTestDatas.cleanTables(scriptRunner);
         
-        System.err.println("*** @Before END ***");
+        log.debug("*** @Before END ***" + cnt);
     }
 
     @SuppressWarnings("static-access")
     @Test
     public void test01() throws Exception{
-        log.debug(zacTimezone);
-        System.err.println("test01");
+        cnt = cnt + 1;
+        log.debug("*** test01 START ***" + cnt);
         
         batchTestDatas.prepareData(scriptRunner,"SQLs/test01.sql");
-        
+                
         User userReturn = userMapper.selectByPrimaryKey(1);
-        System.err.println(userReturn.getFirstName());
 //        String firstName = userReturn.getFirstName();
         
         assertEquals("19780219", this.sdf.format(userReturn.getCreateTime()));
         
-        
         String testDayPlus3 = BatchTestData.getDay(3);
         String time ="00:00:00";
-        batchTestDatas.updateUpdate_time(scriptRunner,testDayPlus3,time, userId01);
+        batchTestDatas.updateUpdate_time(scriptRunner, testDayPlus3, time, userId01);
         
+        log.debug("*** test01 END ***" + cnt);
     }
     @Test
     public void test02() throws Exception{
-        System.err.println("test02");
+        cnt = cnt + 1;
+        log.debug("test02" + cnt);
     }
 
 
     @After
     public void execAfter() {
-        System.err.println("*** @After ***");
+        cnt = cnt + 1;
+        log.debug("*** @After START ***" + cnt);
+        log.debug("*** @After END ***" + cnt);
     }
 
     @AfterClass
     public static void execAfterClass() {
-        System.err.println("***** @AfterClass *****");
+        cnt = cnt + 1;
+        log.debug("*** @AfterClass START ***" + cnt);
+        log.debug("*** @AfterClass END ***" + cnt);
     }
 }

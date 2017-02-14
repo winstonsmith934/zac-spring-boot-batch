@@ -7,6 +7,7 @@ logback.xml
 zac-common.properties
 zac-env.properties
 
+UT用logback文件 logback-test.xml 独立存在，不基于主程序的 logback.xml
 Spring Batchの基礎まとめ
 http://qiita.com/magaya0403/items/f662bd913f802272ae64
 https://spring.io/guides/gs/batch-processing/
