@@ -38,12 +38,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.example.dao.UserMapper;
 import com.example.entity.User;
+import com.example.util.ZacLogUtil;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration( classes = {ZacTestBatchConfiguration.class,} )
 public class BatchTest {
     private static final Logger log = LoggerFactory.getLogger(BatchTest.class);
+    private String className = this.getClass().getName();
+
     
     @Autowired
     private JobRepository jobRepository;
@@ -98,10 +101,13 @@ public class BatchTest {
     private String zacTimezone;
     
     static int cnt = 0;
+    
     @BeforeClass
     public static void execBeforeClass() throws SQLException{
         cnt = cnt + 1;
-        log.debug("***** @BeforeClass START *****" + cnt);
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        String logFormatStr = ZacLogUtil.logFormat("execBeforeClass?????", methodName);
+        log.debug(logFormatStr + "*** START ***" + cnt);
         
         testDataBase = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL)
                 .continueOnError(true)
@@ -116,14 +122,16 @@ public class BatchTest {
         
         dbBean2StrPattern = Pattern.compile("^\\S+@\\w+\\[(.+)\\]$", Pattern.CASE_INSENSITIVE);
         
-        log.debug("***** @BeforeClass END *****" + cnt);
+        log.debug(logFormatStr + "*** END ***" + cnt);
     }
     
     @SuppressWarnings("static-access")
     @Before
     public void execBefore() throws Exception{
         cnt = cnt + 1;
-        log.debug("*** @Before START ***" + cnt);
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        String logFormatStr = ZacLogUtil.logFormat(className, methodName);
+        log.debug(logFormatStr + "*** START ***" + cnt);
         
         log.debug(zacTimezone);
         
@@ -150,14 +158,16 @@ public class BatchTest {
 
         batchTestDatas.cleanTables(scriptRunner);
         
-        log.debug("*** @Before END ***" + cnt);
+        log.debug(logFormatStr + "*** END ***" + cnt);
     }
 
     @SuppressWarnings("static-access")
     @Test
     public void test01() throws Exception{
         cnt = cnt + 1;
-        log.debug("*** test01 START ***" + cnt);
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        String logFormatStr = ZacLogUtil.logFormat(className, methodName);
+        log.debug(logFormatStr + "*** START ***" + cnt);
         
         batchTestDatas.prepareData(scriptRunner,"SQLs/test01.sql");
                 
@@ -170,26 +180,48 @@ public class BatchTest {
         String time ="00:00:00";
         batchTestDatas.updateUpdate_time(scriptRunner, testDayPlus3, time, userId01);
         
-        log.debug("*** test01 END ***" + cnt);
+        
+        
+//        SqlSession sqlSession = MyBatisUtil.getSqlSession(true);
+        
+//        MyBatisPagingItemReader<User> userReader = new MyBatisPagingItemReader<User>();
+//        userReader.setSqlSessionFactory(sqlSessionFactoryBean.getObject());
+//        userReader.setQueryId(CBT_SELECT_CONDITION);
+//        userReader.setPageSize(10);
+//        userReader.
+        
+        log.debug(logFormatStr + "*** END ***" + cnt);
     }
     @Test
     public void test02() throws Exception{
         cnt = cnt + 1;
-        log.debug("test02" + cnt);
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        String logFormatStr = ZacLogUtil.logFormat(className, methodName);
+        log.debug(logFormatStr + "*** START ***" + cnt);
+        
+        
+        log.debug(logFormatStr + "*** END ***" + cnt);
     }
 
 
     @After
     public void execAfter() {
         cnt = cnt + 1;
-        log.debug("*** @After START ***" + cnt);
-        log.debug("*** @After END ***" + cnt);
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        String logFormatStr = ZacLogUtil.logFormat(className, methodName);
+        log.debug(logFormatStr + "*** START ***" + cnt);
+
+
+        log.debug(logFormatStr + "*** END ***" + cnt);
     }
 
     @AfterClass
     public static void execAfterClass() {
         cnt = cnt + 1;
-        log.debug("*** @AfterClass START ***" + cnt);
-        log.debug("*** @AfterClass END ***" + cnt);
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        String logFormatStr = ZacLogUtil.logFormat("execAfterClass?????", methodName);
+        log.debug(logFormatStr + "*** START ***" + cnt);
+        
+        log.debug(logFormatStr + "*** END ***" + cnt);
     }
 }
