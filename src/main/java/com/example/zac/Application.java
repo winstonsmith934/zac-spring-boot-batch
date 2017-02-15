@@ -29,11 +29,12 @@ public class Application {
         }
         CommandInterpreter ci = (CommandInterpreter) ctx.getBean("commandInterpreter");
         ci.run(args);
-        log.error("aaaaaaaaaaaaa");
+
         log.info("zac batch processing is complete!!! ");
         System.exit(0);
     }
     
+    // 不知道为何用
 //    @Bean
 //    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
 //        PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
