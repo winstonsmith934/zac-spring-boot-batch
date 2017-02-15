@@ -8,11 +8,9 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @EnableAutoConfiguration
@@ -31,14 +29,16 @@ public class Application {
         }
         CommandInterpreter ci = (CommandInterpreter) ctx.getBean("commandInterpreter");
         ci.run(args);
+        log.error("aaaaaaaaaaaaa");
+        log.info("zac batch processing is complete!!! ");
         System.exit(0);
     }
     
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
-        c.setIgnoreUnresolvablePlaceholders(true);
-        c.setFileEncoding("UTF-8");
-        return c;
-    }
+//    @Bean
+//    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+//        PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
+//        c.setIgnoreUnresolvablePlaceholders(true);
+//        c.setFileEncoding("UTF-8");
+//        return c;
+//    }
 }

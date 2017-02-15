@@ -17,7 +17,8 @@
 	<!-- stdout appender -->
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%white(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %magenta(${PID:- }) %white(- [%15.15t{14}]) \(%cyan(%-40.40logger{39}) %white(:) %L\) %m%n</pattern>
+    		<charset>UTF-8</charset>
+			<pattern>%-5r %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5le %lo{36} [%file:%line] - %msg %n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>${${spring.profiles.active}.logger.stdout.level:-TRACE}</level>
@@ -32,7 +33,7 @@
 		<append>true</append>
 		<encoder>
 			<charset>UTF-8</charset>
-			<pattern>%d %-5p [%-10t] [%40.40c{40}] - %m [%F:%L]%n</pattern>
+			<pattern>%-5r %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5le %lo{36} [%file:%line] - %msg %n</pattern>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>${${spring.profiles.active}.logger.main.level:-TRACE}</level>
@@ -98,19 +99,19 @@
     </appender>
      -->
     
-    
+    <!--  additivity 默认="true" -->
     <!-- Suppress a false warn for issue BATCH-2161 https://jira.spring.io/browse/BATCH-2161 -->
-    <logger name="org.springframework.context.annotation.ConfigurationClassEnhancer" level="ERROR" additivity="false"/>
+    <logger name="org.springframework.context.annotation.ConfigurationClassEnhancer" level="ERROR" />
     <!-- Suppress a false warn for issue https://github.com/mybatis/mybatis-spring-boot/issues/9 -->
-    <logger name="org.springframework.beans.factory.support.DisposableBeanAdapter" level="ERROR" additivity="false"/>
+    <logger name="org.springframework.beans.factory.support.DisposableBeanAdapter" level="ERROR" />
     
     <!-- フレームlogレベル -->
-    <logger name="org.springframework" level="ERROR" additivity="true"/>
-    <logger name="ch.qos.logback" level="ERROR" additivity="true"/>
+    <logger name="org.springframework" level="ERROR" />
+    <logger name="ch.qos.logback" level="ERROR" />
     
-	<logger name="com.example" level="${${spring.profiles.active}.logger.project.level:-DEBUG}" additivity="true"/>
+	<logger name="com.example" level="${${spring.profiles.active}.logger.project.level:-DEBUG}" />
 
-	<root level="${${spring.profiles.active}.logger.root.level:-ERROR}">
+	<root level="${${spring.profiles.active}.logger.root.level:-WARN}">
 		<appender-ref ref="stdout" />
 		<appender-ref ref="main" />
 		<appender-ref ref="ZAC-ERROR" />

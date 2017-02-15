@@ -17,7 +17,7 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
     @Override
     public void beforeJob(JobExecution jobExecution) {
         String startTimeStr = runTimeUtil.dateToString(jobExecution.getStartTime());
-        System.err.println(">>>>>>>>>> " + startTimeStr + "[" + jobExecution.getJobInstance().getJobName() + "] Job START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        log.info(">>>>>>>>>> " + startTimeStr + "[" + jobExecution.getJobInstance().getJobName() + "] Job START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     @Override
@@ -26,6 +26,6 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
         log.info("Runtime:" + "[" + runtime + " milliseconds]");
 
         String endTimeStr = runTimeUtil.dateToString(jobExecution.getEndTime());
-        System.err.println("<<<<<<<<<< " + endTimeStr + "[" + jobExecution.getJobInstance().getJobName() + "] Job END   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        log.info("<<<<<<<<<< " + endTimeStr + "[" + jobExecution.getJobInstance().getJobName() + "] Job END   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     }
 }
