@@ -15,6 +15,19 @@ public class User {
 
     private Date updateTime;
 
+    public User(Integer id, String firstName, String lastName, Integer age, Date createTime, Date updateTime) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public User() {
+        super();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -28,7 +41,7 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName == null ? null : firstName.trim();
     }
 
     public String getLastName() {
@@ -36,7 +49,7 @@ public class User {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName == null ? null : lastName.trim();
     }
 
     public Integer getAge() {
@@ -61,5 +74,21 @@ public class User {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", firstName=").append(firstName);
+        sb.append(", lastName=").append(lastName);
+        sb.append(", age=").append(age);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append("]");
+        return sb.toString();
     }
 }

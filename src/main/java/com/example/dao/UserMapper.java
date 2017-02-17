@@ -1,18 +1,29 @@
 package com.example.dao;
 
+import com.example.entity.User;
+import com.example.entity.UserExample;
+import java.util.Date;
+import java.util.List;
+import org.apache.ibatis.annotations.Arg;
+import org.apache.ibatis.annotations.ConstructorArgs;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
 
-import com.example.entity.User;
-
 public interface UserMapper {
+    @SelectProvider(type=UserSqlProvider.class, method="countByExample")
+    int countByExample(UserExample example);
+
+    @DeleteProvider(type=UserSqlProvider.class, method="deleteByExample")
+    int deleteByExample(UserExample example);
+
     @Delete({
         "delete from user",
         "where id = #{id,jdbcType=INTEGER}"
@@ -32,21 +43,38 @@ public interface UserMapper {
     @InsertProvider(type=UserSqlProvider.class, method="insertSelective")
     int insertSelective(User record);
 
+    @SelectProvider(type=UserSqlProvider.class, method="selectByExample")
+    @ConstructorArgs({
+        @Arg(column="id", javaType=Integer.class, jdbcType=JdbcType.INTEGER, id=true),
+        @Arg(column="first_name", javaType=String.class, jdbcType=JdbcType.VARCHAR),
+        @Arg(column="last_name", javaType=String.class, jdbcType=JdbcType.VARCHAR),
+        @Arg(column="age", javaType=Integer.class, jdbcType=JdbcType.INTEGER),
+        @Arg(column="create_time", javaType=Date.class, jdbcType=JdbcType.TIMESTAMP),
+        @Arg(column="update_time", javaType=Date.class, jdbcType=JdbcType.TIMESTAMP)
+    })
+    List<User> selectByExample(UserExample example);
+
     @Select({
         "select",
         "id, first_name, last_name, age, create_time, update_time",
         "from user",
         "where id = #{id,jdbcType=INTEGER}"
     })
-    @Results({
-        @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
-        @Result(column="first_name", property="firstName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="last_name", property="lastName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="age", property="age", jdbcType=JdbcType.INTEGER),
-        @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    @ConstructorArgs({
+        @Arg(column="id", javaType=Integer.class, jdbcType=JdbcType.INTEGER, id=true),
+        @Arg(column="first_name", javaType=String.class, jdbcType=JdbcType.VARCHAR),
+        @Arg(column="last_name", javaType=String.class, jdbcType=JdbcType.VARCHAR),
+        @Arg(column="age", javaType=Integer.class, jdbcType=JdbcType.INTEGER),
+        @Arg(column="create_time", javaType=Date.class, jdbcType=JdbcType.TIMESTAMP),
+        @Arg(column="update_time", javaType=Date.class, jdbcType=JdbcType.TIMESTAMP)
     })
     User selectByPrimaryKey(Integer id);
+
+    @UpdateProvider(type=UserSqlProvider.class, method="updateByExampleSelective")
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    @UpdateProvider(type=UserSqlProvider.class, method="updateByExample")
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
 
     @UpdateProvider(type=UserSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(User record);

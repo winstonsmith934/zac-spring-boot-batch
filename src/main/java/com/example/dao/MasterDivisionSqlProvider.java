@@ -1,47 +1,39 @@
 package com.example.dao;
 
-import com.example.entity.User;
-import com.example.entity.UserExample.Criteria;
-import com.example.entity.UserExample.Criterion;
-import com.example.entity.UserExample;
+import com.example.entity.MasterDivision;
+import com.example.entity.MasterDivisionExample.Criteria;
+import com.example.entity.MasterDivisionExample.Criterion;
+import com.example.entity.MasterDivisionExample;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 
-public class UserSqlProvider {
+public class MasterDivisionSqlProvider {
 
-    public String countByExample(UserExample example) {
+    public String countByExample(MasterDivisionExample example) {
         SQL sql = new SQL();
-        sql.SELECT("count(*)").FROM("user");
+        sql.SELECT("count(*)").FROM("m_division");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String deleteByExample(UserExample example) {
+    public String deleteByExample(MasterDivisionExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("user");
+        sql.DELETE_FROM("m_division");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(User record) {
+    public String insertSelective(MasterDivision record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("user");
+        sql.INSERT_INTO("m_division");
         
-        if (record.getId() != null) {
-            sql.VALUES("id", "#{id,jdbcType=INTEGER}");
+        if (record.getDivisionId() != null) {
+            sql.VALUES("division_id", "#{divisionId,jdbcType=INTEGER}");
         }
         
-        if (record.getFirstName() != null) {
-            sql.VALUES("first_name", "#{firstName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getLastName() != null) {
-            sql.VALUES("last_name", "#{lastName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getAge() != null) {
-            sql.VALUES("age", "#{age,jdbcType=INTEGER}");
+        if (record.getDivisionName() != null) {
+            sql.VALUES("division_name", "#{divisionName,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
@@ -55,19 +47,17 @@ public class UserSqlProvider {
         return sql.toString();
     }
 
-    public String selectByExample(UserExample example) {
+    public String selectByExample(MasterDivisionExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
-            sql.SELECT_DISTINCT("id");
+            sql.SELECT_DISTINCT("division_id");
         } else {
-            sql.SELECT("id");
+            sql.SELECT("division_id");
         }
-        sql.SELECT("first_name");
-        sql.SELECT("last_name");
-        sql.SELECT("age");
+        sql.SELECT("division_name");
         sql.SELECT("create_time");
         sql.SELECT("update_time");
-        sql.FROM("user");
+        sql.FROM("m_division");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -78,26 +68,18 @@ public class UserSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        User record = (User) parameter.get("record");
-        UserExample example = (UserExample) parameter.get("example");
+        MasterDivision record = (MasterDivision) parameter.get("record");
+        MasterDivisionExample example = (MasterDivisionExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("m_division");
         
-        if (record.getId() != null) {
-            sql.SET("id = #{record.id,jdbcType=INTEGER}");
+        if (record.getDivisionId() != null) {
+            sql.SET("division_id = #{record.divisionId,jdbcType=INTEGER}");
         }
         
-        if (record.getFirstName() != null) {
-            sql.SET("first_name = #{record.firstName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getLastName() != null) {
-            sql.SET("last_name = #{record.lastName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getAge() != null) {
-            sql.SET("age = #{record.age,jdbcType=INTEGER}");
+        if (record.getDivisionName() != null) {
+            sql.SET("division_name = #{record.divisionName,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
@@ -114,34 +96,24 @@ public class UserSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("m_division");
         
-        sql.SET("id = #{record.id,jdbcType=INTEGER}");
-        sql.SET("first_name = #{record.firstName,jdbcType=VARCHAR}");
-        sql.SET("last_name = #{record.lastName,jdbcType=VARCHAR}");
-        sql.SET("age = #{record.age,jdbcType=INTEGER}");
+        sql.SET("division_id = #{record.divisionId,jdbcType=INTEGER}");
+        sql.SET("division_name = #{record.divisionName,jdbcType=VARCHAR}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         
-        UserExample example = (UserExample) parameter.get("example");
+        MasterDivisionExample example = (MasterDivisionExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(User record) {
+    public String updateByPrimaryKeySelective(MasterDivision record) {
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("m_division");
         
-        if (record.getFirstName() != null) {
-            sql.SET("first_name = #{firstName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getLastName() != null) {
-            sql.SET("last_name = #{lastName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getAge() != null) {
-            sql.SET("age = #{age,jdbcType=INTEGER}");
+        if (record.getDivisionName() != null) {
+            sql.SET("division_name = #{divisionName,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
@@ -152,12 +124,12 @@ public class UserSqlProvider {
             sql.SET("update_time = #{updateTime,jdbcType=TIMESTAMP}");
         }
         
-        sql.WHERE("id = #{id,jdbcType=INTEGER}");
+        sql.WHERE("division_id = #{divisionId,jdbcType=INTEGER}");
         
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, UserExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, MasterDivisionExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }

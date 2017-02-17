@@ -1,73 +1,78 @@
 package com.example.dao;
 
-import com.example.entity.User;
-import com.example.entity.UserExample.Criteria;
-import com.example.entity.UserExample.Criterion;
-import com.example.entity.UserExample;
+import com.example.entity.TransactionStaff;
+import com.example.entity.TransactionStaffExample.Criteria;
+import com.example.entity.TransactionStaffExample.Criterion;
+import com.example.entity.TransactionStaffExample;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 
-public class UserSqlProvider {
+public class TransactionStaffSqlProvider {
 
-    public String countByExample(UserExample example) {
+    public String countByExample(TransactionStaffExample example) {
         SQL sql = new SQL();
-        sql.SELECT("count(*)").FROM("user");
+        sql.SELECT("count(*)").FROM("t_staff");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String deleteByExample(UserExample example) {
+    public String deleteByExample(TransactionStaffExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("user");
+        sql.DELETE_FROM("t_staff");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(User record) {
+    public String insertSelective(TransactionStaff record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("user");
+        sql.INSERT_INTO("t_staff");
         
-        if (record.getId() != null) {
-            sql.VALUES("id", "#{id,jdbcType=INTEGER}");
+        if (record.getStaffId() != null) {
+            sql.VALUES("staff_id", "#{staffId,jdbcType=INTEGER}");
         }
         
-        if (record.getFirstName() != null) {
-            sql.VALUES("first_name", "#{firstName,jdbcType=VARCHAR}");
+        if (record.getStaffCode() != null) {
+            sql.VALUES("staff_code", "#{staffCode,jdbcType=VARCHAR}");
         }
         
-        if (record.getLastName() != null) {
-            sql.VALUES("last_name", "#{lastName,jdbcType=VARCHAR}");
+        if (record.getStaffName() != null) {
+            sql.VALUES("staff_name", "#{staffName,jdbcType=VARCHAR}");
         }
         
-        if (record.getAge() != null) {
-            sql.VALUES("age", "#{age,jdbcType=INTEGER}");
+        if (record.getStaffNameKana() != null) {
+            sql.VALUES("staff_name_kana", "#{staffNameKana,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateTime() != null) {
-            sql.VALUES("create_time", "#{createTime,jdbcType=TIMESTAMP}");
+        if (record.getStaffDivisionId() != null) {
+            sql.VALUES("staff_division_id", "#{staffDivisionId,jdbcType=INTEGER}");
         }
         
-        if (record.getUpdateTime() != null) {
-            sql.VALUES("update_time", "#{updateTime,jdbcType=TIMESTAMP}");
+        if (record.getStaffMailaddress() != null) {
+            sql.VALUES("staff_mailaddress", "#{staffMailaddress,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getStaffStatus() != null) {
+            sql.VALUES("staff_status", "#{staffStatus,jdbcType=TINYINT}");
         }
         
         return sql.toString();
     }
 
-    public String selectByExample(UserExample example) {
+    public String selectByExample(TransactionStaffExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
-            sql.SELECT_DISTINCT("id");
+            sql.SELECT_DISTINCT("staff_id");
         } else {
-            sql.SELECT("id");
+            sql.SELECT("staff_id");
         }
-        sql.SELECT("first_name");
-        sql.SELECT("last_name");
-        sql.SELECT("age");
-        sql.SELECT("create_time");
-        sql.SELECT("update_time");
-        sql.FROM("user");
+        sql.SELECT("staff_code");
+        sql.SELECT("staff_name");
+        sql.SELECT("staff_name_kana");
+        sql.SELECT("staff_division_id");
+        sql.SELECT("staff_mailaddress");
+        sql.SELECT("staff_status");
+        sql.FROM("t_staff");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -78,34 +83,38 @@ public class UserSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        User record = (User) parameter.get("record");
-        UserExample example = (UserExample) parameter.get("example");
+        TransactionStaff record = (TransactionStaff) parameter.get("record");
+        TransactionStaffExample example = (TransactionStaffExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("t_staff");
         
-        if (record.getId() != null) {
-            sql.SET("id = #{record.id,jdbcType=INTEGER}");
+        if (record.getStaffId() != null) {
+            sql.SET("staff_id = #{record.staffId,jdbcType=INTEGER}");
         }
         
-        if (record.getFirstName() != null) {
-            sql.SET("first_name = #{record.firstName,jdbcType=VARCHAR}");
+        if (record.getStaffCode() != null) {
+            sql.SET("staff_code = #{record.staffCode,jdbcType=VARCHAR}");
         }
         
-        if (record.getLastName() != null) {
-            sql.SET("last_name = #{record.lastName,jdbcType=VARCHAR}");
+        if (record.getStaffName() != null) {
+            sql.SET("staff_name = #{record.staffName,jdbcType=VARCHAR}");
         }
         
-        if (record.getAge() != null) {
-            sql.SET("age = #{record.age,jdbcType=INTEGER}");
+        if (record.getStaffNameKana() != null) {
+            sql.SET("staff_name_kana = #{record.staffNameKana,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateTime() != null) {
-            sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
+        if (record.getStaffDivisionId() != null) {
+            sql.SET("staff_division_id = #{record.staffDivisionId,jdbcType=INTEGER}");
         }
         
-        if (record.getUpdateTime() != null) {
-            sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
+        if (record.getStaffMailaddress() != null) {
+            sql.SET("staff_mailaddress = #{record.staffMailaddress,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getStaffStatus() != null) {
+            sql.SET("staff_status = #{record.staffStatus,jdbcType=TINYINT}");
         }
         
         applyWhere(sql, example, true);
@@ -114,50 +123,55 @@ public class UserSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("t_staff");
         
-        sql.SET("id = #{record.id,jdbcType=INTEGER}");
-        sql.SET("first_name = #{record.firstName,jdbcType=VARCHAR}");
-        sql.SET("last_name = #{record.lastName,jdbcType=VARCHAR}");
-        sql.SET("age = #{record.age,jdbcType=INTEGER}");
-        sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
-        sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
+        sql.SET("staff_id = #{record.staffId,jdbcType=INTEGER}");
+        sql.SET("staff_code = #{record.staffCode,jdbcType=VARCHAR}");
+        sql.SET("staff_name = #{record.staffName,jdbcType=VARCHAR}");
+        sql.SET("staff_name_kana = #{record.staffNameKana,jdbcType=VARCHAR}");
+        sql.SET("staff_division_id = #{record.staffDivisionId,jdbcType=INTEGER}");
+        sql.SET("staff_mailaddress = #{record.staffMailaddress,jdbcType=VARCHAR}");
+        sql.SET("staff_status = #{record.staffStatus,jdbcType=TINYINT}");
         
-        UserExample example = (UserExample) parameter.get("example");
+        TransactionStaffExample example = (TransactionStaffExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(User record) {
+    public String updateByPrimaryKeySelective(TransactionStaff record) {
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("t_staff");
         
-        if (record.getFirstName() != null) {
-            sql.SET("first_name = #{firstName,jdbcType=VARCHAR}");
+        if (record.getStaffCode() != null) {
+            sql.SET("staff_code = #{staffCode,jdbcType=VARCHAR}");
         }
         
-        if (record.getLastName() != null) {
-            sql.SET("last_name = #{lastName,jdbcType=VARCHAR}");
+        if (record.getStaffName() != null) {
+            sql.SET("staff_name = #{staffName,jdbcType=VARCHAR}");
         }
         
-        if (record.getAge() != null) {
-            sql.SET("age = #{age,jdbcType=INTEGER}");
+        if (record.getStaffNameKana() != null) {
+            sql.SET("staff_name_kana = #{staffNameKana,jdbcType=VARCHAR}");
         }
         
-        if (record.getCreateTime() != null) {
-            sql.SET("create_time = #{createTime,jdbcType=TIMESTAMP}");
+        if (record.getStaffDivisionId() != null) {
+            sql.SET("staff_division_id = #{staffDivisionId,jdbcType=INTEGER}");
         }
         
-        if (record.getUpdateTime() != null) {
-            sql.SET("update_time = #{updateTime,jdbcType=TIMESTAMP}");
+        if (record.getStaffMailaddress() != null) {
+            sql.SET("staff_mailaddress = #{staffMailaddress,jdbcType=VARCHAR}");
         }
         
-        sql.WHERE("id = #{id,jdbcType=INTEGER}");
+        if (record.getStaffStatus() != null) {
+            sql.SET("staff_status = #{staffStatus,jdbcType=TINYINT}");
+        }
+        
+        sql.WHERE("staff_id = #{staffId,jdbcType=INTEGER}");
         
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, UserExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, TransactionStaffExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }
