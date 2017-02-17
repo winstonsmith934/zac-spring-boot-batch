@@ -40,6 +40,14 @@
 		</javaClientGenerator>
 
 		<!-- 要生成的那些表(更改tableName 和domainObjectName 就可以了) -->
+		<table schema="spring_batch_test" tableName="t_staff"
+			domainObjectName="TransactionStaff">
+			<property name="useActualColumnNames" value="false" />
+		</table>
+		<table schema="spring_batch_test" tableName="m_division"
+			domainObjectName="MasterDivision">
+			<property name="useActualColumnNames" value="false" />
+		</table>
 		<table schema="spring_batch_test" tableName="user"
 			domainObjectName="User">
 			<property name="useActualColumnNames" value="false" />
