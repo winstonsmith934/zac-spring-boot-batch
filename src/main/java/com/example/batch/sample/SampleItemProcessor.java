@@ -37,10 +37,10 @@ public class SampleItemProcessor implements ItemProcessor<Person, Person> {
             log.debug(rec.getFirstName());
         }
         
-     // UserテーブルfirstName指定で検索例
-        UserExample example２ = new UserExample();
-        example２.createCriteria().andLastNameEqualTo(firstName);
-        List<User> list２ = userMapper.selectByExample(example２);
+        // UserテーブルfirstName指定で検索例
+        UserExample example2 = new UserExample();
+        example2.createCriteria().andLastNameEqualTo(firstName);
+        List<User> list２ = userMapper.selectByExample(example2);
         log.debug("cnt:" + list２.size());
         for(User rec : list２){
             log.debug(rec.getFirstName());
