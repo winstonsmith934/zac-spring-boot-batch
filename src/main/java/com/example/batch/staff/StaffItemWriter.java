@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.entity.TransactionStaff;
 
-@Component
+@Component("StaffItemWriter")
 public class StaffItemWriter implements ItemWriter<TransactionStaff> {
     private static final Logger log = LoggerFactory.getLogger(StaffItemWriter.class);
 
