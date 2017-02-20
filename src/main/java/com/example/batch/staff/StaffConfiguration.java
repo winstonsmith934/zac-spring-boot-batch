@@ -8,17 +8,12 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.example.entity.TransactionStaff;
@@ -43,20 +38,20 @@ public class StaffConfiguration {
 //        return new StaffReader();
 //    }
     
-    @Bean
-    public ItemReader<TransactionStaff> reader() {
-        FlatFileItemReader<TransactionStaff> reader = new FlatFileItemReader<TransactionStaff>();
-        reader.setResource(new ClassPathResource("staff-data.csv"));
-        reader.setLineMapper(new DefaultLineMapper<TransactionStaff>() {{
-            setLineTokenizer(new DelimitedLineTokenizer() {{
-                setNames(new String[] { "staffCode", "staffName", "staffNameKana", "staffDivisionId", "staffMailaddress", "staffStatus" });
-            }});
-            setFieldSetMapper(new BeanWrapperFieldSetMapper<TransactionStaff>() {{
-                setTargetType(TransactionStaff.class);
-            }});
-        }});
-        return reader;
-    }
+//    @Bean
+//    public ItemReader<TransactionStaff> reader() {
+//        FlatFileItemReader<TransactionStaff> reader = new FlatFileItemReader<TransactionStaff>();
+//        reader.setResource(new ClassPathResource("staff-data.csv"));
+//        reader.setLineMapper(new DefaultLineMapper<TransactionStaff>() {{
+//            setLineTokenizer(new DelimitedLineTokenizer() {{
+//                setNames(new String[] { "staffCode", "staffName", "staffNameKana", "staffDivisionId", "staffMailaddress", "staffStatus" });
+//            }});
+//            setFieldSetMapper(new BeanWrapperFieldSetMapper<TransactionStaff>() {{
+//                setTargetType(TransactionStaff.class);
+//            }});
+//        }});
+//        return reader;
+//    }
     
     @Bean
     public StaffItemProcessor staffProcessor() {
@@ -72,24 +67,47 @@ public class StaffConfiguration {
         return writer;
     }
     
+//    @Bean
+//    public Job importUserJob() {
+//        return jobBuilderFactory.get("importStaffJob")
+//                .incrementer(new RunIdIncrementer())
+//                .flow(staffStep())
+//                .end()
+//                .build();
+//    }
+
+    @Autowired
+    @Qualifier("staffStep")
+    private Step staffStep;
+    
     @Bean
     public Job importUserJob() {
         return jobBuilderFactory.get("importStaffJob")
                 .incrementer(new RunIdIncrementer())
-                .flow(staffStep())
+                .flow(staffStep)
                 .end()
                 .build();
     }
-
+    
     @Bean
-    public Step staffStep() {
+    public Step staffStep(StaffMyBatisPagingItemReader reader) {
         return stepBuilderFactory.get("staffStep")
                 .<TransactionStaff, TransactionStaff> chunk(10)
-                .reader(reader())
+                .reader(reader)
                 .processor(staffProcessor())
                 .writer(staffWriter())
                 .build();
     }
+    
+//    @Bean
+//    public Step staffStep() {
+//        return stepBuilderFactory.get("staffStep")
+//                .<TransactionStaff, TransactionStaff> chunk(10)
+//                .reader(reader())
+//                .processor(staffProcessor())
+//                .writer(staffWriter())
+//                .build();
+//    }
     // end::jobstep[]
 
     @Bean
