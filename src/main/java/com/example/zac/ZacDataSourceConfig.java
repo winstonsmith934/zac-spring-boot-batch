@@ -2,7 +2,6 @@ package com.example.zac;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -41,20 +40,33 @@ public class ZacDataSourceConfig {
 	}
 
 	@Bean()
-	public SqlSessionFactory sqlSessionFactory() throws Exception {
+	public SqlSessionFactoryBean sqlSessionFactoryBean() throws Exception {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(basicDataSource());
-		return (SqlSessionFactory) bean.getObject();
+		return bean;
 	}
 
 	@Bean
-	//http://stackoverflow.com/questions/7621920/scopeprototype-bean-scope-not-creating-new-bean
-	//http://outofmemory.cn/java/spring/spring-bean-scope
 	@Scope("prototype")
 	public SqlSessionTemplate sqlSessionFactoryTemplate() throws Exception {
-		return new SqlSessionTemplate(sqlSessionFactory(), ExecutorType.BATCH);
+		return new SqlSessionTemplate(sqlSessionFactoryBean().getObject(), ExecutorType.BATCH);
 	}
 
+//    @Bean()
+//    public SqlSessionFactory sqlSessionFactory() throws Exception {
+//        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+//        bean.setDataSource(basicDataSource());
+//        return (SqlSessionFactory) bean.getObject();
+//    }
+//
+//    @Bean
+//    //http://stackoverflow.com/questions/7621920/scopeprototype-bean-scope-not-creating-new-bean
+//    //http://outofmemory.cn/java/spring/spring-bean-scope
+//    @Scope("prototype")
+//    public SqlSessionTemplate sqlSessionFactoryTemplate() throws Exception {
+//        return new SqlSessionTemplate(sqlSessionFactory(), ExecutorType.BATCH);
+//    }
+	
 	@Bean
 	public DataSourceTransactionManager dataSourceTransactionManager() {
 		return new DataSourceTransactionManager(basicDataSource());
