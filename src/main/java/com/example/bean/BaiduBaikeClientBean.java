@@ -17,6 +17,10 @@ public class BaiduBaikeClientBean {
     @JSONField(name = "newLemmaId")
     private String newLemmaId;
 
+    @JSONField(name = "card")
+    private String card;
+    
+    
     public String getId() {
         return id;
     }
@@ -39,5 +43,13 @@ public class BaiduBaikeClientBean {
 
     public void setNewLemmaId(String newLemmaId) {
         this.newLemmaId = newLemmaId;
+    }
+
+    public String getCard() {
+        return card;
+    }
+
+    public void setCard(String card) {
+        this.card = card;
     }
 }

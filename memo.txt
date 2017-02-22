@@ -38,3 +38,10 @@ Jacoco可以嵌入到Ant、Maven中，也可以使用Java Agent技术监控任�
 Jacoco会监控JVM中的调用，生成监控结果（默认保存在jacoco.exec文件中），
 然后分析此结果，配合源代码生成覆盖率报告。需要注意的是：监控和分析这两步，
 必须使用相同的Class文件，否则由于Class不同，而无法定位到具体的方法，导致覆盖率均为0%。
+
+JasperReports 6 で PDF を作り、ブラウザーで表示する (5)
+http://wiki.tk2kpdn.com/create-pdf-by-jasperreports6-and-java-p5/
+JavaでPDFを出力するには？　～Jasper Reports設定編～
+https://amg-solution.jp/blog/1519
+JasperReportsで帳票出力してみた
+http://dev.classmethod.jp/server-side/java/jasperreports-tutorial/

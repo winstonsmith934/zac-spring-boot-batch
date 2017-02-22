@@ -46,6 +46,7 @@ public class BaiduBaikeClient {
             System.err.println(zacClientBean.getId());
             System.err.println(zacClientBean.getNewLemmaId());
             System.err.println(zacClientBean.getSubLemmaId());
+            System.err.println(zacClientBean.getCard());
         }
 
     }
