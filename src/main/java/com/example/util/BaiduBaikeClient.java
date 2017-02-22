@@ -1,6 +1,7 @@
 package com.example.util;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.example.bean.BaiduBaikeClientBean;
+import com.example.bean.BaiduBaikeClientCardBean;
 
 /**
  * @Author: zac
@@ -47,6 +49,20 @@ public class BaiduBaikeClient {
             System.err.println(zacClientBean.getNewLemmaId());
             System.err.println(zacClientBean.getSubLemmaId());
             System.err.println(zacClientBean.getCard());
+            
+            List<BaiduBaikeClientCardBean> baiduBaikeClientCardBean = JSON.parseArray(zacClientBean.getCard(),BaiduBaikeClientCardBean.class);
+            for(BaiduBaikeClientCardBean cardObject : baiduBaikeClientCardBean){
+                try {
+                    System.err.println(cardObject.getKey());
+                    System.err.println(cardObject.getName());
+                    System.err.println(cardObject.getValue());
+                    System.err.println(cardObject.getFormat());
+                    System.err.println("------------------------------");
+                }catch (Exception e) {
+                    log.error("Error",e);
+                    continue;
+                }  
+            }
         }
 
     }
