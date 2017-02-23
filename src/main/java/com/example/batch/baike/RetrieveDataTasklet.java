@@ -28,6 +28,7 @@ import com.example.bean.BaiduBaikeClientCardBean;
 import com.example.dao.UserMapper;
 import com.example.entity.User;
 // http://www.yihaomen.com/article/java/434.htm
+// zacTODO tasklet做什么用？
 @Component
 public class RetrieveDataTasklet implements Tasklet{
     private static final Logger log = LoggerFactory.getLogger(RetrieveDataTasklet.class);
