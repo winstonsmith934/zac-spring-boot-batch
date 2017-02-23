@@ -18,7 +18,12 @@ public class BaikeItemWriter implements ItemWriter<BaiduBaikeClientCardBean> {
 	@Override
 	public void write(List<? extends BaiduBaikeClientCardBean> items) throws Exception {
 		for (int i =0; i < items.size(); i++){
-			log.debug(items.get(i).getValue());
+			log.debug(items.get(i).getFormat());
+			log.debug(items.get(i).getKey());
+			log.debug(items.get(i).getName());
+            log.debug(items.get(i).getValue());
 		}
+		// zacTODO reader 无法停止取得数据
+		System.exit(0);
 	}
 }
