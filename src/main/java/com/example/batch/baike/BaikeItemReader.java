@@ -23,31 +23,33 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.example.bean.BaiduBaikeClientBean;
 
-
 @Component("BaikeItemReader")
 public class BaikeItemReader implements ItemReader<BaiduBaikeClientBean> {
     private static final Logger log = LoggerFactory.getLogger(BaikeItemReader.class);
+    private int count;
 
     @Override
     public BaiduBaikeClientBean read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         BaiduBaikeClientBean baiduBaikeClientBean = null;
-        ClientConfig cc = new ClientConfig();
-        Client client = ClientBuilder.newClient(cc);
-        WebTarget target = client.target(getBaseURI()).path("BaikeLemmaCardApi");
-        Form form = fillUpForm();
-        Response res = target.request(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
-                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        if (count < 1) {
+            ClientConfig cc = new ClientConfig();
+            Client client = ClientBuilder.newClient(cc);
+            WebTarget target = client.target(getBaseURI()).path("BaikeLemmaCardApi");
+            Form form = fillUpForm();
+            Response res = target.request(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+                    .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-        if (res.getStatus() != 200) {
-            log.debug("==========");
-        } else {
-            String resBody = res.readEntity(String.class);
-            baiduBaikeClientBean = JSON.parseObject(resBody, BaiduBaikeClientBean.class);
+            if (res.getStatus() != 200) {
+                log.debug("==========");
+            } else {
+                String resBody = res.readEntity(String.class);
+                baiduBaikeClientBean = JSON.parseObject(resBody, BaiduBaikeClientBean.class);
+            }
+            count++;
         }
-        
         return baiduBaikeClientBean;
     }
-    
+
     private static Form fillUpForm() {
         Form form = new Form();
         form.param("scope", "103");

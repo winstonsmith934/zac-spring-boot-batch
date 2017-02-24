@@ -23,7 +23,5 @@ public class BaikeItemWriter implements ItemWriter<BaiduBaikeClientCardBean> {
 			log.debug(items.get(i).getName());
             log.debug(items.get(i).getValue());
 		}
-		// zacTODO reader 无法停止取得数据
-		System.exit(0);
 	}
 }
