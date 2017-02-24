@@ -2,26 +2,24 @@ package com.example.zac;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,32 +80,64 @@ public class CommandInterpreter {
         String jobName = (String)argList.get(1);
         log.debug("Job to launch: " + jobName);
         
+        // 方法1
+//        try {
+//            Job job = jobRegistry.getJob(jobName);
+//
+//            JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis()).toJobParameters();
+//
+//            JobExecution execution = jobLauncher.run(job, jobParameters);
+//            
+//            System.out.println("Exit Status : " + execution.getStatus());
+//            
+//        } catch (NoSuchJobException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (JobExecutionAlreadyRunningException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (JobRestartException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (JobInstanceAlreadyCompleteException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (JobParametersInvalidException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        
+        // 方法2
+        JobParametersBuilder paramBuilder = new JobParametersBuilder();
         try {
             Job job = jobRegistry.getJob(jobName);
-
-            JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis()).toJobParameters();
-
-            JobExecution execution = jobLauncher.run(job, jobParameters);
-            
-            System.out.println("Exit Status : " + execution.getStatus());
-            
-        } catch (NoSuchJobException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JobExecutionAlreadyRunningException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JobRestartException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JobInstanceAlreadyCompleteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JobParametersInvalidException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (cl.hasOption('t')) { // Give a specific time tag
+                paramBuilder.addDate("date", parseTimestamp(cl.getOptionValue('t')));
+            } else if (cl.hasOption('d')) { // Give a specific date time
+                paramBuilder.addDate("date", parseDate(cl.getOptionValue('d')));
+            } else { // By Default, set current time to JobParameter so that job can run multiple times.
+                paramBuilder.addDate("date", new Date());
+            }
+            if (cl.hasOption('f')) {
+                paramBuilder.addString("file", cl.getOptionValue('f'));
+            }
+            for(Entry<Object, Object> entry : cl.getOptionProperties("P").entrySet()) {
+                String key = (String)entry.getKey();
+                String value = (String)entry.getValue();
+                paramBuilder.addString(key, value);
+            }
+            jobLauncher.run(job, paramBuilder.toJobParameters());
+        } catch (org.springframework.batch.core.launch.NoSuchJobException e) {
+            return showUsage("Job does not exist with name: " + jobName);
+        } catch (org.springframework.batch.core.repository.JobRestartException e) {
+            return showUsage("Job " + jobName + " JobRestartException: " + paramBuilder.toJobParameters());
+        } catch (org.springframework.batch.core.repository.JobExecutionAlreadyRunningException e) {
+            return showUsage("Job " + jobName + " is already running with this parameter set: " + paramBuilder.toJobParameters());
+        } catch (org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException e) {
+            return showUsage("Job " + jobName + " is already finished with this parameter set: " + paramBuilder.toJobParameters());
+        } catch (org.springframework.batch.core.JobParametersInvalidException e) {
+            return showUsage("Invalid parameters: "  + paramBuilder.toJobParameters());
         }
-        
         // 方法2
 //        JobParametersBuilder paramBuilder = new JobParametersBuilder();
 //        try {
@@ -140,6 +170,27 @@ public class CommandInterpreter {
         return 0;
     }
     
+    private Date parseTimestamp(String tsStr) throws ParseException {
+        try {
+            log.debug("Timestamp to parse:" + tsStr);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(Long.parseLong(tsStr));
+            return calendar.getTime();
+        } catch (java.lang.NumberFormatException e) {
+            throw new ParseException("Invalid timestamp:" + tsStr);
+        }
+    }
+    
+    private Date parseDate(String dateStr) throws ParseException {
+        try {
+            log.debug("Date string to parse:" + dateStr);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            return format.parse(dateStr);
+        } catch (java.text.ParseException e) {
+            throw new ParseException("Invalid date string:" + dateStr 
+                        + "\nThis -d option takes ISO 8601 date format like: 2010-01-02T03:04:05h.678+09");
+        }
+    }
     private int showUsage(String errorMsg) {
         int errorCode;
         if (errorMsg == null) {
@@ -156,7 +207,14 @@ public class CommandInterpreter {
         } catch (java.io.UnsupportedEncodingException e) {
             log.warn("Wierd, this should never happen", e);
         }
-       
+        
+        // http://blog.csdn.net/mxj588love/article/details/54928480
+        String cmdLineSyntax = "java -jar " + appFileName + " Command parms [Options]";
+        String helpHeader = "Valid commands are:\n" + " job jobNameToLunch [Options]\n" + " service [start|stop|restart]\n";
+        String helpFooter = "Copyright(c) zac.com 2017";
+        HelpFormatter hf = new HelpFormatter();
+        hf.printHelp(cmdLineSyntax, helpHeader, opts, helpFooter);
+        
         return errorCode;
     }
 }
