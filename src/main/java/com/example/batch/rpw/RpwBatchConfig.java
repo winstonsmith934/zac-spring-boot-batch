@@ -1,4 +1,4 @@
-package com.example.rpw;
+package com.example.batch.rpw;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;

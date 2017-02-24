@@ -1,4 +1,4 @@
-package com.example.rpw;
+package com.example.batch.rpw;
 
 import java.util.List;
 

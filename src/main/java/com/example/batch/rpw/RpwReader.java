@@ -1,4 +1,4 @@
-package com.example.rpw;
+package com.example.batch.rpw;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
