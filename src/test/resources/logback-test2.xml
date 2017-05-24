@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration
     [
-      <!ENTITY log-dir "/usr/local/var/log/jobs/cbt/JOB_CBT_0003_0004_0001/">
-      <!ENTITY default-mail-from "cn-cdc-ecapi-alert@mail.rakuten.com">
-      <!ENTITY default-mail-to "cn-cdc-ecapi-alert@mail.rakuten.com">
+      <!ENTITY log-dir "/usr/local/var/log/jobs/zac/JOB_ZAC_0003_0002_0001/">
+      <!ENTITY default-mail-from "zgithub@hotmail.com">
+      <!ENTITY default-mail-to "zgithub@hotmail.com">
     ]
 >
 <configuration>
