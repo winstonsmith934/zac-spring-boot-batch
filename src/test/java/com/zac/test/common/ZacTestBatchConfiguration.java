@@ -1,4 +1,4 @@
-package com.zac.test;
+package com.zac.test.common;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;

@@ -40,6 +40,7 @@ import com.example.dao.UserMapper;
 import com.example.entity.User;
 import com.example.util.ZacLogUtil;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.zac.test.common.ZacTestBatchConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration( classes = {ZacTestBatchConfiguration.class,} )
