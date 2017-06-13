@@ -45,3 +45,21 @@ JavaでPDFを出力するには？　～Jasper Reports設定編～
 https://amg-solution.jp/blog/1519
 JasperReportsで帳票出力してみた
 http://dev.classmethod.jp/server-side/java/jasperreports-tutorial/
+
+
+#--------------------------------------------------
+# Mac shell run jar
+#--------------------------------------------------
+#!/bin/bash
+function java_run(){
+
+java -jar Hello.jar $*
+
+if [ $? -ne 0 ] ;then
+	return 1
+else
+	return 0
+fi
+}
+java_run
+echo $? 
